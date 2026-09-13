@@ -1,0 +1,362 @@
+{
+  "info": {
+    "_postman_id": "9f82b0ae-a653-48ec-a794-aa6ba4df0f74",
+    "name": "escola-golang",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48949919",
+    "_collection_link": "https://go.postman.co/collection/48949919-9f82b0ae-a653-48ec-a794-aa6ba4df0f74?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Criar Aluno",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"matricula\": 1212123231,\r\n    \"nome\": \"PEdro\",\r\n    \"email\": \"Pedro.email\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Alunos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bucar Aluno",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/alunos/1212123230",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "alunos",
+            "1212123230"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Sala",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 1,\r\n    \"nome\": \"sala teste\",\r\n    \"capacidade\": 4,\r\n    \"recursos\": [\r\n        \"monitor\",\r\n        \"projetor\",\r\n        \"lousa\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/salas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "salas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Salas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/salas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "salas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar Sala",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/salas/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "salas",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Turma",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 4,\r\n    \"nome\": \"Teste Turma\",\r\n    \"disciplina\": \"Matemativa\",\r\n    \"professor\": \"Ravache\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Turmas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 4,\r\n    \"nome\": \"Teste Turma\",\r\n    \"disciplina\": \"Matemativa\",\r\n    \"professor\": \"Ravache\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar Turma",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 4,\r\n    \"nome\": \"Teste Turma\",\r\n    \"disciplina\": \"Matemativa\",\r\n    \"professor\": \"Ravache\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Alocar Sala Pela Turma",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"sala_id\": 2,\r\n    \"dia_semana\": \"Segunda\",\r\n    \"horario_inicio\": \"12:00\",\r\n    \"horario_fim\": \"13:00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas/2/alocar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas",
+            "2",
+            "alocar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Adicionar Aluno na Turma",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"aluno_id\": 1212123231\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas/1/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas",
+            "1",
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Alunos da Turma Copy",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/turmas/2/alunos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "turmas",
+            "2",
+            "alunos"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
