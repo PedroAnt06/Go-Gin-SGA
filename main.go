@@ -16,6 +16,9 @@ func main() {
 	salasRepositorio := NovoSalasRepositorio()
 	salasService := NovoSalaService(salasRepositorio)
 
+	turmasRepositorio := NovoTurmasRepositorio()
+	turmasService := NovoTurmaService(turmasRepositorio, salasRepositorio)
+
 	r := gin.New()
 
 	// Uso dos Middlewares globais nativos e personalizados
@@ -106,9 +109,63 @@ func main() {
 		})
 
 		// Domínio de Turmas (Classes)
-		//v1.POST("/turmas", turmaHandler.CriarTurma)
-		//v1.GET("/turmas", turmaHandler.ListarTurmas)
-		//v1.POST("/turmas/:id/alocar", turmaHandler.AlocarSala)
+		v1.POST("/turmas", func(c *gin.Context) {
+			var body Turma
+			if err := c.ShouldBindJSON(&body); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			turma, err := turmasService.CriarTurma(body.ID, body.Nome, body.Disciplina, body.Professor)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusCreated, turma)
+		})
+
+		v1.GET("/turmas", func(c *gin.Context) {
+			c.JSON(http.StatusOK, turmasService.ListarTurmas())
+		})
+
+		v1.GET("/turmas/:id", func(c *gin.Context) {
+			idParam := c.Param("id")
+			id, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "ID inválido"})
+				return
+			}
+			turma, err := turmasService.BuscarTurmaPorID(id)
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"erro": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, turma)
+		})
+
+		v1.POST("/turmas/:id/alocar", func(c *gin.Context) {
+			idParam := c.Param("id")
+			id, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "ID inválido"})
+				return
+			}
+
+			var body Alocacao
+			if err := c.ShouldBindJSON(&body); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			turma, err := turmasService.AlocarSala(id, body.SalaID, body.DiaSemana, body.HorarioInicio, body.HorarioFim)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusOK, turma)
+		})
 	}
 
 	r.Run(":8080")
