@@ -26,6 +26,10 @@ func main() {
 			})
 		})
 
+		v1.POST("/alunos", func(c *gin.Context) {
+			c.nome = r.criarAluno(c.nome, c.email)
+		})
+
 		// Domínio de Turmas (Classes)
 		//v1.POST("/turmas", turmaHandler.CriarTurma)
 		//v1.GET("/turmas", turmaHandler.ListarTurmas)
