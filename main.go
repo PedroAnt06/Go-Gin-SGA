@@ -9,6 +9,9 @@ import (
 
 func main() {
 
+	alunosRepositorio := NovoAlunosRepositorio()
+	alunosService := NovoAlunoService(alunosRepositorio)
+
 	r := gin.New()
 
 	// Uso dos Middlewares globais nativos e personalizados
@@ -26,8 +29,25 @@ func main() {
 			})
 		})
 
+		// Domínio de Alunos
 		v1.POST("/alunos", func(c *gin.Context) {
-			c.nome = r.criarAluno(c.nome, c.email)
+			var body Aluno
+			if err := c.ShouldBindJSON(&body); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			aluno, err := alunosService.CriarAluno(body.Matrícula, body.Nome, body.Email)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusCreated, aluno)
+		})
+
+		v1.GET("/alunos", func(c *gin.Context) {
+			c.JSON(http.StatusOK, alunosService.ListarAlunos())
 		})
 
 		// Domínio de Turmas (Classes)

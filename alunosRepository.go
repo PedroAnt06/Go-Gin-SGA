@@ -30,3 +30,12 @@ func (r *AlunosRepositorio) criarAluno(matricula int, nome string, email string)
 	r.alunos = append(r.alunos, novoAluno)
 	return novoAluno
 }
+
+func (r *AlunosRepositorio) buscarAlunoPorMatricula(matricula int) *Aluno {
+	for _, aluno := range r.alunos {
+		if aluno.Matrícula == matricula {
+			return &aluno
+		}
+	}
+	return nil
+}
