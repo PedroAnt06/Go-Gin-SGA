@@ -13,6 +13,9 @@ func main() {
 	alunosRepositorio := NovoAlunosRepositorio()
 	alunosService := NovoAlunoService(alunosRepositorio)
 
+	salasRepositorio := NovoSalasRepositorio()
+	salasService := NovoSalaService(salasRepositorio)
+
 	r := gin.New()
 
 	// Uso dos Middlewares globais nativos e personalizados
@@ -64,6 +67,42 @@ func main() {
 				return
 			}
 			c.JSON(http.StatusOK, aluno)
+		})
+
+		// Domínio de Salas
+		v1.POST("/salas", func(c *gin.Context) {
+			var body Sala
+			if err := c.ShouldBindJSON(&body); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			sala, err := salasService.CriarSala(body.ID, body.Nome, body.Capacidade, body.Recursos)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusCreated, sala)
+		})
+
+		v1.GET("/salas", func(c *gin.Context) {
+			c.JSON(http.StatusOK, salasService.ListarSalas())
+		})
+
+		v1.GET("/salas/:id", func(c *gin.Context) {
+			idParam := c.Param("id")
+			id, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "ID inválido"})
+				return
+			}
+			sala, err := salasService.BuscarSalaPorID(id)
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"erro": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, sala)
 		})
 
 		// Domínio de Turmas (Classes)
