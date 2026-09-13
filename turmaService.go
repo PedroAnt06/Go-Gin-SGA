@@ -6,14 +6,16 @@ import (
 )
 
 type TurmaService struct {
-	repositorio      *TurmasRepositorio
-	salasRepositorio *SalasRepositorio
+	repositorio       *TurmasRepositorio
+	salasRepositorio  *SalasRepositorio
+	alunosRepositorio *AlunosRepositorio
 }
 
-func NovoTurmaService(repositorio *TurmasRepositorio, salasRepositorio *SalasRepositorio) *TurmaService {
+func NovoTurmaService(repositorio *TurmasRepositorio, salasRepositorio *SalasRepositorio, alunosRepositorio *AlunosRepositorio) *TurmaService {
 	return &TurmaService{
-		repositorio:      repositorio,
-		salasRepositorio: salasRepositorio,
+		repositorio:       repositorio,
+		salasRepositorio:  salasRepositorio,
+		alunosRepositorio: alunosRepositorio,
 	}
 }
 
@@ -97,6 +99,70 @@ func (t *TurmaService) AlocarSala(turmaID int, salaID int, diaSemana string, hor
 		HorarioFim:    horarioFim,
 	}
 	return turma, nil
+}
+
+func (t *TurmaService) MatricularAluno(turmaID int, alunoID int) (*Turma, error) {
+	turma := t.repositorio.buscarTurmaPorID(turmaID)
+	if turma == nil {
+		return nil, errors.New("Turma não encontrada")
+	}
+
+	if t.alunosRepositorio.buscarAlunoPorMatricula(alunoID) == nil {
+		return nil, errors.New("Aluno não encontrado")
+	}
+
+	if contemAluno(turma.AlunoIDs, alunoID) {
+		return nil, errors.New("Aluno já matriculado nesta turma")
+	}
+
+	if turma.Alocacao != nil {
+		sala := t.salasRepositorio.buscarSalaPorID(turma.Alocacao.SalaID)
+		if sala == nil {
+			return nil, errors.New("Sala não encontrada")
+		}
+		if len(turma.AlunoIDs)+1 > sala.Capacidade {
+			return nil, errors.New("Capacidade da sala excedida")
+		}
+	}
+
+	if turma.Alocacao != nil {
+		for _, outra := range t.repositorio.listarTurmas() {
+			if outra.ID == turmaID || outra.Alocacao == nil {
+				continue
+			}
+			if !contemAluno(outra.AlunoIDs, alunoID) || !strings.EqualFold(outra.Alocacao.DiaSemana, turma.Alocacao.DiaSemana) {
+				continue
+			}
+			sobrepoe, err := horariosSobrepoem(
+				turma.Alocacao.HorarioInicio, turma.Alocacao.HorarioFim,
+				outra.Alocacao.HorarioInicio, outra.Alocacao.HorarioFim,
+			)
+			if err != nil {
+				return nil, err
+			}
+			if sobrepoe {
+				return nil, errors.New("Conflito de agenda: aluno já tem aula em outra turma nesse horário")
+			}
+		}
+	}
+
+	turma.AlunoIDs = append(turma.AlunoIDs, alunoID)
+	return turma, nil
+}
+
+func (t *TurmaService) ListarAlunosDaTurma(turmaID int) ([]Aluno, error) {
+	turma := t.repositorio.buscarTurmaPorID(turmaID)
+	if turma == nil {
+		return nil, errors.New("Turma não encontrada")
+	}
+
+	alunos := make([]Aluno, 0, len(turma.AlunoIDs))
+	for _, alunoID := range turma.AlunoIDs {
+		if aluno := t.alunosRepositorio.buscarAlunoPorMatricula(alunoID); aluno != nil {
+			alunos = append(alunos, *aluno)
+		}
+	}
+	return alunos, nil
 }
 
 func contemAluno(alunoIDs []int, alunoID int) bool {

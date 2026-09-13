@@ -17,7 +17,7 @@ func main() {
 	salasService := NovoSalaService(salasRepositorio)
 
 	turmasRepositorio := NovoTurmasRepositorio()
-	turmasService := NovoTurmaService(turmasRepositorio, salasRepositorio)
+	turmasService := NovoTurmaService(turmasRepositorio, salasRepositorio, alunosRepositorio)
 
 	r := gin.New()
 
@@ -165,6 +165,48 @@ func main() {
 			}
 
 			c.JSON(http.StatusOK, turma)
+		})
+
+		v1.POST("/turmas/:id/alunos", func(c *gin.Context) {
+			idParam := c.Param("id")
+			id, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "ID inválido"})
+				return
+			}
+
+			var body struct {
+				AlunoID int `json:"aluno_id"`
+			}
+			if err := c.ShouldBindJSON(&body); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			turma, err := turmasService.MatricularAluno(id, body.AlunoID)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusOK, turma)
+		})
+
+		v1.GET("/turmas/:id/alunos", func(c *gin.Context) {
+			idParam := c.Param("id")
+			id, err := strconv.Atoi(idParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "ID inválido"})
+				return
+			}
+
+			alunos, err := turmasService.ListarAlunosDaTurma(id)
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"erro": err.Error()})
+				return
+			}
+
+			c.JSON(http.StatusOK, alunos)
 		})
 	}
 
