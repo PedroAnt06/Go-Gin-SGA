@@ -10,10 +10,10 @@ func (a *AlunoService) ListarAlunos() []Aluno {
 	return a.repositorio.listarAlunos()
 }
 
-func (a *AlunoService) CriarAluno(nome string, email string) (Aluno, error) {
-	if nome == "" || email == "" {
-		return Aluno{}, errors.New("preencha pfvr o nome e/ou email")
+func (a *AlunoService) CriarAluno(matricula int, nome string, email string) (Aluno, error) {
+	if matricula == 0 || nome == "" || email == "" {
+		return Aluno{}, errors.New("preencha pfv todos os campos")
 	}
 
-	return a.repositorio.criarAluno(nome, email), nil
+	return a.repositorio.criarAluno(matricula, nome, email), nil
 }
