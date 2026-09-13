@@ -27,3 +27,11 @@ func (a *AlunoService) CriarAluno(matricula int, nome string, email string) (Alu
 
 	return a.repositorio.criarAluno(matricula, nome, email), nil
 }
+
+func (a *AlunoService) BuscarAlunoPorMatricula(matricula int) (*Aluno, error) {
+
+	if a.repositorio.buscarAlunoPorMatricula(matricula) == nil {
+		return nil, errors.New("Aluno não encontrado")
+	}
+	return a.repositorio.buscarAlunoPorMatricula(matricula), nil
+}

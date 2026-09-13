@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -48,6 +49,21 @@ func main() {
 
 		v1.GET("/alunos", func(c *gin.Context) {
 			c.JSON(http.StatusOK, alunosService.ListarAlunos())
+		})
+
+		v1.GET("/alunos/:matricula", func(c *gin.Context) {
+			matriculaParam := c.Param("matricula")
+			matricula, err := strconv.Atoi(matriculaParam)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"erro": "Matrícula inválida"})
+				return
+			}
+			aluno, err := alunosService.BuscarAlunoPorMatricula(matricula)
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"erro": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, aluno)
 		})
 
 		// Domínio de Turmas (Classes)
